@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+	<constant name="struts.i18n.encoding" value="UTF-8" />
+	<package name="signup" namespace="/" extends="struts-default">
+		<action name="SignUp" class="action.SignUp">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">HomePage</param>
+			</result>
+			<result name="fail">/signup.jsp</result>
+			<result name="input">/signup.jsp</result>
+		</action>
+	</package>
+
+	<package name="login" namespace="/" extends="struts-default">
+		<action name="createImageAction" class="action.CreateImageAction">
+			<result name="success" type="stream">
+				<param name="contentType">image/jpeg</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+		<action name="Login" class="action.Login">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">HomePage</param>
+			</result>
+			<result name="fail">/login.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+	</package>
+	
+	<package name="homepage" namespace="/" extends="struts-default">
+	<interceptors>
+            <interceptor name="LoginCheck" class="interceptor.UserAuthorityInterceptor"></interceptor>
+            <interceptor-stack name="LoginCheckStack">
+                <interceptor-ref name="LoginCheck"></interceptor-ref>
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        
+        <default-interceptor-ref name="LoginCheckStack"></default-interceptor-ref> 
+	   
+	   <global-results>    
+            <result name="nologin">/login.jsp</result>
+        </global-results>
+        
+        
+		<action name="HomePage" class="action.HomePage">
+			<result name="success">/homepage.jsp</result>
+		</action>
+		<action name="SearchGoods" class="action.SearchGoods">
+			<result name="success">/homepage.jsp</result>
+		</action>
+		<action name="doUpload" class="action.FileUploadAction">
+                 <result name="success" type="redirectAction" >
+				<param name="namespace">/</param>
+				<param name="actionName">HomePage</param>
+				</result>
+        </action>
+		<action name="CartRemove" class="action.CartRemove">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">CartAction</param>
+			</result>
+		</action>
+		<action name="CartRemoveAll" class="action.CartRemoveAll">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">CartAction</param>
+			</result>
+		</action>
+		<action name="CartAction" class="action.CartAction">
+			<result name="success">/Cart.jsp</result>
+		</action>
+	</package>
+	
+	<package name="manage" namespace="/" extends="struts-default">
+	<interceptors>
+            <interceptor name="LoginCheck" class="interceptor.UserAuthorityInterceptor"></interceptor>
+             <interceptor name="PowerCheck" class="interceptor.PowerInterceptor"></interceptor>
+            <interceptor-stack name="PowerCheckStack">
+                <interceptor-ref name="LoginCheck"></interceptor-ref>
+                <interceptor-ref name="PowerCheck"></interceptor-ref>
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+         
+        <default-interceptor-ref name="PowerCheckStack"></default-interceptor-ref> 
+	   
+	   <global-results>    
+            <result name="noIn" type="chain">
+                <param name="namespace">/</param>
+			    <param name="actionName">HomePage</param>
+			 </result>
+			 <result name="nologin">/login.jsp</result>
+        </global-results>
+        
+		<action name="AddGoods" class="action.managegoods.AddGoods">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">ManageGoods</param>
+			</result>
+		</action>
+		<action name="DeleteGoods" class="action.managegoods.DeleteGoods">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">ManageGoods</param>
+			</result>
+		</action>
+		<action name="UpdateGoods" class="action.managegoods.UpdateGoods">
+			<result name="success" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">ManageGoods</param>
+			</result>
+		</action>
+		<action name="ToUpdateGoods" class="action.managegoods.ToUpdateGoods">
+			<result name="success">/updateGoods.jsp</result>
+		</action>
+		<action name="ManageGoods" class="action.managegoods.ManageGoods">
+			<result name="success">/manageGoods.jsp</result>
+		</action>
+	</package>
+
+</struts>    
